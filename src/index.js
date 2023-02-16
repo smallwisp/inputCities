@@ -119,12 +119,18 @@ const request = async() => {
         dropdownSelect.innerHTML = '';
       }
     })
+
+    const addAutocomplete = () => {
       
+    };
+      
+    input.addEventListener('input',(event) => {
+      dropdownCol.innerHTML = '';
+      dropdownSelect.innerHTML = '';
+    });
   };
 
 request();
 
-input.addEventListener('click',(event) => {
-});
 
 
