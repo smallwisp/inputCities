@@ -52,22 +52,6 @@ const request = async() => {
         parent.append(countryBlock);
         let cities = item.cities.map(i => [i.name, +i.count]);
 
-        // сортировка массива городов по количеству жителей
-/*         let largerIndex;
-        for( let i = 0; i < cities.length - 1; i++) {
-          largerIndex = i;
-          for( let j = i; j < cities.length; j++) {
-            if (cities[largerIndex][1] < cities[j][1]) {
-              largerIndex = j;
-            }
-          }
-          if (i !== largerIndex) {
-            let temp = cities[i];
-            cities[i] = cities[largerIndex];
-            cities[largerIndex] = temp;
-          }
-        } */
-
         let sortCities = sortArr(cities).slice(0, 3);
         
         console.log(sortCities);
@@ -88,60 +72,7 @@ const request = async() => {
                                     <div class="dropdown-lists__count">${sortCities[2][1]}</div>
                                   </div>`
       })
-/*       parent.innerHTML = ` <div class="dropdown-lists__countryBlock">
-                            <div class="dropdown-lists__total-line">
-                              <div class="dropdown-lists__country">Россия</div>
-                              <div class="dropdown-lists__count">144500000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                          </div>
-                          <div class="dropdown-lists__countryBlock">
-                            <div class="dropdown-lists__total-line">
-                              <div class="dropdown-lists__country">Россия</div>
-                              <div class="dropdown-lists__count">144500000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                          </div>
-                          <div class="dropdown-lists__countryBlock">
-                            <div class="dropdown-lists__total-line">
-                              <div class="dropdown-lists__country">Россия</div>
-                              <div class="dropdown-lists__count">144500000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                            <div class="dropdown-lists__line">
-                              <div class="dropdown-lists__city">Москва</div>
-                              <div class="dropdown-lists__count">12615000</div>
-                            </div>
-                          </div>` */
+
     };
 
     const addCountryList = (textContent) => {
@@ -155,7 +86,6 @@ const request = async() => {
                                         <div class="dropdown-lists__country">${obj.country}</div>
                                         <div class="dropdown-lists__count">${obj.count}</div>
                                       </div>
-                                      
                                     </div>
                                   </div>`;
       obj.cities.forEach(item => {
@@ -172,8 +102,10 @@ const request = async() => {
       let target = event.target;
       console.log(target.classList);
       if (target === input) {
+        dropdownCol.innerHTML = '';
         addFullList(dropdownCol);
         dropdownDefault.style.display = 'block';
+        dropdownSelect.style.display = 'none';
       }
 
       if (target.classList.contains('dropdown-lists__total-line')) {
@@ -187,19 +119,12 @@ const request = async() => {
         dropdownSelect.innerHTML = '';
       }
     })
-
       
   };
 
 request();
 
-
 input.addEventListener('click',(event) => {
 });
 
-/* input.addEventListener('blur', (event) => {
-  console.log(event.target);
-  dropdownCol.innerHTML = '';
-}) */
 
-// console.log(data);
