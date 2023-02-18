@@ -5,6 +5,7 @@ const input = document.querySelector('#select-cities'),
       dropdownCol = document.querySelector('.dropdown-lists__col'),
       dropdownDefault = document.querySelector('.dropdown-lists__list--default'),
       dropdownSelect = document.querySelector('.dropdown-lists__list--select'),
+      dropdownAutocomplete = document.querySelector('.dropdown-lists__list--autocomplete'),
       main = document.querySelector('.main');
 // import request from "./modules/request.js";
 
@@ -39,12 +40,6 @@ const request = async() => {
         data = JSON.parse(json);
       })
 
-    console.log(data);
-      
-    console.log(data.RU);
-    let countries = data.RU.map(item => item.country);
-    console.log(countries);
-
     const addFullList = (parent) => {
       data.RU.forEach((item) => {
         let countryBlock = document.createElement('div');
@@ -54,7 +49,6 @@ const request = async() => {
 
         let sortCities = sortArr(cities).slice(0, 3);
         
-        console.log(sortCities);
         countryBlock.innerHTML = `<div class="dropdown-lists__total-line">
                                     <div class="dropdown-lists__country">${item.country}</div>
                                     <div class="dropdown-lists__count">${item.count}</div>
@@ -120,13 +114,44 @@ const request = async() => {
       }
     })
 
-    const addAutocomplete = () => {
-      
+    const addAutocomplete = (parent, value) => {
+      data.RU.forEach((item) => {
+        item.cities.forEach(i => {
+          if (i.name.toLowerCase().startsWith(value) /* || i.name.toLowerCase().startsWith(value[0]) */) {
+            let dropdownLine = document.createElement('div');
+            dropdownLine.classList.add('dropdown-lists__line');
+            dropdownLine.innerHTML = `<div class="dropdown-lists__city">${i.name}</div>
+                                      <div class="dropdown-lists__count">${i.count}</div>`
+            parent.append(dropdownLine);
+          } else {
+            let dropdownLine = document.createElement('div');
+            dropdownLine.classList.add('dropdown-lists__line');
+            dropdownLine.innerHTML = `<div class="dropdown-lists__city">Нихуя нет!</div>`;
+            parent.append(dropdownLine);
+          }
+        });
+        
+      })
     };
       
     input.addEventListener('input',(event) => {
+      let value = event.target.value;
       dropdownCol.innerHTML = '';
       dropdownSelect.innerHTML = '';
+      dropdownAutocomplete.style.display = 'block';
+      let countryBlock = document.createElement('div');
+      countryBlock.classList.add('dropdown-lists__countryBlock');
+
+      addAutocomplete(countryBlock, value);
+
+      const dropdownColAutocomplete = document.querySelector('.dropdown-lists__col');
+
+      
+
+      
+      dropdownColAutocomplete.append(countryBlock);
+
+
     });
   };
 

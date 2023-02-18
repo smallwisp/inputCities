@@ -23,7 +23,7 @@ const data = {
                     "name": "Краснодар",
                     "count": "918145",
                     "link": "https://ru.wikipedia.org/wiki/%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80"
-                },
+                }, 
                 {
                     "name": "Екатеринбург",
                     "count": "1484456",
