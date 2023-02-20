@@ -133,7 +133,7 @@ const request = async() => {
       if (findValue.length === 0) {
         let dropdownLine = document.createElement('div');
             dropdownLine.classList.add('dropdown-lists__line');
-            dropdownLine.innerHTML = `<div class="dropdown-lists__city">Нихуя нет!</div>`;
+            dropdownLine.innerHTML = `<div class="dropdown-lists__city">Ничего не найдено!</div>`;
             parent.append(dropdownLine);
       }
       console.log(findValue);
@@ -152,6 +152,10 @@ const request = async() => {
       dropdownColAutocomplete.append(countryBlock);
       addAutocomplete(countryBlock, value);
 
+      if (value === '') {
+        dropdownColAutocomplete.innerHTML = '';
+        addFullList(dropdownCol);
+      }
 
 
     });
