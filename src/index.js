@@ -115,23 +115,28 @@ const request = async() => {
     })
 
     const addAutocomplete = (parent, value) => {
+      let citiesArr = [];
       data.RU.forEach((item) => {
         item.cities.forEach(i => {
-          if (i.name.toLowerCase().startsWith(value) /* || i.name.toLowerCase().startsWith(value[0]) */) {
+          citiesArr.push(i.name);
+          if (i.name.toLowerCase().startsWith(value)) {
             let dropdownLine = document.createElement('div');
             dropdownLine.classList.add('dropdown-lists__line');
             dropdownLine.innerHTML = `<div class="dropdown-lists__city">${i.name}</div>
                                       <div class="dropdown-lists__count">${i.count}</div>`
             parent.append(dropdownLine);
-          } else {
-            let dropdownLine = document.createElement('div');
+          } 
+        });
+      })
+
+      let findValue = citiesArr.filter(item => item.toLowerCase().startsWith(value));
+      if (findValue.length === 0) {
+        let dropdownLine = document.createElement('div');
             dropdownLine.classList.add('dropdown-lists__line');
             dropdownLine.innerHTML = `<div class="dropdown-lists__city">Нихуя нет!</div>`;
             parent.append(dropdownLine);
-          }
-        });
-        
-      })
+      }
+      console.log(findValue);
     };
       
     input.addEventListener('input',(event) => {
@@ -142,14 +147,11 @@ const request = async() => {
       let countryBlock = document.createElement('div');
       countryBlock.classList.add('dropdown-lists__countryBlock');
 
-      addAutocomplete(countryBlock, value);
-
       const dropdownColAutocomplete = document.querySelector('.dropdown-lists__col');
-
-      
-
       
       dropdownColAutocomplete.append(countryBlock);
+      addAutocomplete(countryBlock, value);
+
 
 
     });
