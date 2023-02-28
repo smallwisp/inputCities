@@ -1,6 +1,9 @@
 'use strict'
 
 const input = document.querySelector('#select-cities'),
+      label = document.querySelector('label'),
+      closeBtn = document.querySelector('.close-button'),
+      btn = document.querySelector('.button'),
       dropdownList = document.querySelector('.dropdown-lists'),
       dropdownCol = document.querySelector('.dropdown-lists__col'),
       dropdownDefault = document.querySelector('.dropdown-lists__list--default'),
@@ -8,6 +11,8 @@ const input = document.querySelector('#select-cities'),
       dropdownAutocomplete = document.querySelector('.dropdown-lists__list--autocomplete'),
       main = document.querySelector('.main');
 // import request from "./modules/request.js";
+
+input.value = '';
 
 const sortArr = (arr) => {
   let largerIndex;
@@ -27,6 +32,8 @@ const sortArr = (arr) => {
 
   return arr;
 };
+
+btn.classList.add('disabled');
 
 const request = async() => {
   let data;
@@ -96,6 +103,7 @@ const request = async() => {
       let target = event.target;
       console.log(target.classList);
       if (target === input) {
+        label.textContent = '';
         dropdownCol.innerHTML = '';
         addFullList(dropdownCol);
         dropdownDefault.style.display = 'block';
@@ -112,6 +120,33 @@ const request = async() => {
         dropdownCol.innerHTML = '';
         dropdownSelect.innerHTML = '';
       }
+
+      if (target.classList.contains('dropdown-lists__city')) {
+        input.value = target.textContent;
+        closeBtn.style.display = 'block';
+        data.RU.forEach(item => {
+          item.cities.forEach(i => {
+            if (i.name === input.value) {
+              btn.href = i.link
+            }
+          });
+        });
+        
+      }
+      
+      if (target.classList.contains('close-button')) {
+        input.value = '';
+        dropdownCol.innerHTML = '';
+        closeBtn.style.display = 'none';
+      }
+      
+      if (input.value) {
+        btn.classList.remove('disabled');
+        console.log(input.value);
+      } else {
+        btn.classList.add('disabled');
+      }
+    
     })
 
     const addAutocomplete = (parent, value) => {
@@ -132,13 +167,13 @@ const request = async() => {
       let findValue = citiesArr.filter(item => item.toLowerCase().startsWith(value));
       if (findValue.length === 0) {
         let dropdownLine = document.createElement('div');
-            dropdownLine.classList.add('dropdown-lists__line');
-            dropdownLine.innerHTML = `<div class="dropdown-lists__city">Ничего не найдено!</div>`;
-            parent.append(dropdownLine);
+        dropdownLine.classList.add('dropdown-lists__line');
+        dropdownLine.innerHTML = `<div class="dropdown-lists__city">Ничего не найдено!</div>`;
+        parent.append(dropdownLine);
       }
       console.log(findValue);
     };
-      
+    
     input.addEventListener('input',(event) => {
       let value = event.target.value;
       dropdownCol.innerHTML = '';
@@ -146,7 +181,7 @@ const request = async() => {
       dropdownAutocomplete.style.display = 'block';
       let countryBlock = document.createElement('div');
       countryBlock.classList.add('dropdown-lists__countryBlock');
-
+      
       const dropdownColAutocomplete = document.querySelector('.dropdown-lists__col');
       
       dropdownColAutocomplete.append(countryBlock);
@@ -156,12 +191,12 @@ const request = async() => {
         dropdownColAutocomplete.innerHTML = '';
         addFullList(dropdownCol);
       }
-
-
     });
+    
+    
   };
-
-request();
-
-
-
+  
+  request();
+  
+  
+  
