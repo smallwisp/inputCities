@@ -36,16 +36,30 @@ const sortArr = (arr) => {
 btn.classList.add('disabled');
 
 const request = async() => {
+  let clearLocalStorage = confirm('Очистить localStorage?');
+  if (clearLocalStorage) {
+    localStorage.clear();
+  }
+  let chooseLang = prompt('Choose your language:', 'RU, EN, DE');
+  localStorage.setItem('language', chooseLang);
+
+  let usingLang = localStorage.getItem('language');
+
   let data;
     await fetch('../../db_cities.js')
       .then(response => {
-        // console.log(response.text());
         return response.text();
       })
       .then(response => {
         let json = response.slice(12);
         data = JSON.parse(json);
       })
+
+    // используем язык из localStorage
+
+    localStorage.setItem('dataLang', JSON.stringify(data[usingLang]));
+
+    // функции добавления списков
 
     const addFullList = (parent) => {
       data.RU.forEach((item) => {
@@ -98,10 +112,36 @@ const request = async() => {
       })
 
     };
+
+    const addAutocomplete = (parent, value) => {
+      let citiesArr = [];
+      data.RU.forEach((item) => {
+        item.cities.forEach(i => {
+          citiesArr.push(i.name);
+          if (i.name.toLowerCase().startsWith(value)) {
+            let dropdownLine = document.createElement('div');
+            dropdownLine.classList.add('dropdown-lists__line');
+            dropdownLine.innerHTML = `<div class="dropdown-lists__city">${i.name}</div>
+                                      <div class="dropdown-lists__count">${i.count}</div>`
+            parent.append(dropdownLine);
+          } 
+        });
+      })
+
+      let findValue = citiesArr.filter(item => item.toLowerCase().startsWith(value));
+      if (findValue.length === 0) {
+        let dropdownLine = document.createElement('div');
+        dropdownLine.classList.add('dropdown-lists__line');
+        dropdownLine.innerHTML = `<div class="dropdown-lists__city">Ничего не найдено!</div>`;
+        parent.append(dropdownLine);
+      }
+      console.log(findValue);
+    };
+
+    // блок основных действий
     
     main.addEventListener('click', (event) => {
       let target = event.target;
-      console.log(target.classList);
       if (target === input) {
         label.textContent = '';
         dropdownCol.innerHTML = '';
@@ -148,31 +188,6 @@ const request = async() => {
       }
     
     })
-
-    const addAutocomplete = (parent, value) => {
-      let citiesArr = [];
-      data.RU.forEach((item) => {
-        item.cities.forEach(i => {
-          citiesArr.push(i.name);
-          if (i.name.toLowerCase().startsWith(value)) {
-            let dropdownLine = document.createElement('div');
-            dropdownLine.classList.add('dropdown-lists__line');
-            dropdownLine.innerHTML = `<div class="dropdown-lists__city">${i.name}</div>
-                                      <div class="dropdown-lists__count">${i.count}</div>`
-            parent.append(dropdownLine);
-          } 
-        });
-      })
-
-      let findValue = citiesArr.filter(item => item.toLowerCase().startsWith(value));
-      if (findValue.length === 0) {
-        let dropdownLine = document.createElement('div');
-        dropdownLine.classList.add('dropdown-lists__line');
-        dropdownLine.innerHTML = `<div class="dropdown-lists__city">Ничего не найдено!</div>`;
-        parent.append(dropdownLine);
-      }
-      console.log(findValue);
-    };
     
     input.addEventListener('input',(event) => {
       let value = event.target.value;
@@ -194,9 +209,9 @@ const request = async() => {
     });
     
     
-  };
+};
   
-  request();
+request();
   
   
   
