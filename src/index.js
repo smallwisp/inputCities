@@ -59,10 +59,41 @@ const request = async() => {
 
     localStorage.setItem('dataLang', JSON.stringify(data[usingLang]));
 
+    const useLocalLang = (data) => {
+      let localData;
+      if (usingLang === 'EN') {
+        data[usingLang].forEach((item, index, arr) => {
+          if (item.country === 'United Kingdom') {
+            data[usingLang].unshift(item);
+            data[usingLang].pop(item);
+          }
+        })
+        localStorage.setItem('dataLang', JSON.stringify(data[usingLang]));
+        localData = localStorage.getItem('dataLang');
+        console.log(data[usingLang]);
+      }
+
+      if (usingLang === 'DE') {
+        data[usingLang].forEach((item, index, arr) => {
+          if (item.country === 'Deutschland') {
+            data[usingLang].unshift(item);
+            data[usingLang].pop(item);
+          }
+        })
+        localStorage.setItem('dataLang', JSON.stringify(data[usingLang]));
+        localData = localStorage.getItem('dataLang');
+      }
+      if (localData) {
+        return JSON.parse(localData);
+      } else {
+        return data.RU;
+      }
+    };
+
     // функции добавления списков
 
     const addFullList = (parent) => {
-      data.RU.forEach((item) => {
+      useLocalLang(data).forEach((item) => {
         let countryBlock = document.createElement('div');
         countryBlock.classList.add('dropdown-lists__countryBlock');
         parent.append(countryBlock);
@@ -92,7 +123,7 @@ const request = async() => {
 
     const addCountryList = (textContent) => {
       dropdownDefault.style.display = 'none';
-      let obj = data.RU.find(item => item.country === textContent);
+      let obj = useLocalLang(data).find(item => item.country === textContent);
       console.log(obj);
       dropdownSelect.style.display = 'block';
       dropdownSelect.innerHTML = `<div class="dropdown-lists__col">
@@ -115,7 +146,7 @@ const request = async() => {
 
     const addAutocomplete = (parent, value) => {
       let citiesArr = [];
-      data.RU.forEach((item) => {
+      useLocalLang(data).forEach((item) => {
         item.cities.forEach(i => {
           citiesArr.push(i.name);
           if (i.name.toLowerCase().startsWith(value)) {
